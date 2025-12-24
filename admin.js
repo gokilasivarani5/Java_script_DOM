@@ -1,4 +1,12 @@
-let products = JSON.parse(localStorage.getItem("products")) || [];
+const name = document.getElementById("name");
+const price = document.getElementById("price");
+const stock = document.getElementById("stock");
+
+function getProducts() {
+  return JSON.parse(localStorage.getItem("products")) || [];
+}
+
+let products = getProducts();
 
 function addProduct() {
   if (!name.value || price.value <= 0 || stock.value < 0) return;
@@ -11,15 +19,13 @@ function addProduct() {
     highlight: false
   });
 
-  name.value = "";
-  price.value = "";
-  stock.value = "";
-
   localStorage.setItem("products", JSON.stringify(products));
+  name.value = price.value = stock.value = "";
   renderProducts();
 }
 
 function renderProducts() {
+  products = getProducts();
   const box = document.getElementById("products");
   box.innerHTML = "";
 
@@ -27,7 +33,7 @@ function renderProducts() {
     box.innerHTML += `
       <div class="card ${p.stock === 0 ? "empty" : ""} ${p.highlight ? "highlight" : ""}">
         <b>${p.name}</b>
-        <p>&#8377;${p.price}</p>
+        <p>₹${p.price}</p>
         <p>Stock: ${p.stock}</p>
 
         <div class="actions">
@@ -35,8 +41,7 @@ function renderProducts() {
           <button class="warn" onclick="toggleHighlight(${p.id})">Highlight</button>
           <button class="danger" onclick="deleteProduct(${p.id})">Delete</button>
         </div>
-      </div>
-    `;
+      </div>`;
   });
 }
 
@@ -67,8 +72,8 @@ function deleteProduct(id) {
 }
 
 function toggleOrders() {
-  const ordersBox = document.getElementById("orders");
-  ordersBox.classList.toggle("hidden");
+  const section = document.getElementById("ordersSection");
+  section.classList.toggle("hidden");
 
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   renderOrders(orders);
@@ -84,23 +89,20 @@ function renderOrders(orders) {
   }
 
   orders.forEach(order => {
-    let itemsHTML = "";
-    order.items.forEach(item => {
-      itemsHTML += `
-        <p>${item.name} → ${item.qty} × &#8377;${item.price}</p>
-      `;
+    let items = "";
+    order.items.forEach(i => {
+      items += `<p>${i.name} → ${i.qty} × ₹${i.price}</p>`;
     });
 
     box.innerHTML += `
-      <div class="card">
+      <div class="card highlight">
         <b>Customer:</b> ${order.customer}<br>
         <b>Address:</b> ${order.address}<br><br>
-        ${itemsHTML}
+        ${items}
         <hr>
-        <b>Total:</b> &#8377;${order.total}<br>
+        <b>Total:</b> ₹${order.total}<br>
         <small>${order.date}</small>
-      </div>
-    `;
+      </div>`;
   });
 }
 

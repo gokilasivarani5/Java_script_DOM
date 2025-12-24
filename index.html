@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>User Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,61 +21,42 @@
   <div id="store" class="grid"></div>
 </div>
 
-
 <div id="cartPanel" class="side hidden">
   <button class="back-btn" onclick="goBack()">← Back</button>
   <h3>Checkout</h3>
-
   <div id="cartItems"></div>
   <h4 id="cartTotal"></h4>
-
   <button class="primary" onclick="openAddress()">Place Order</button>
 </div>
-
 
 <div id="addressPanel" class="side hidden">
   <button class="back-btn" onclick="goBack()">← Back</button>
   <h3>Customer Details</h3>
 
   <div class="form-box">
-    <div>
-      <label>Full Name</label>
-      <input id="custName" type="text" placeholder="Enter your full name">
-    </div>
+    <label>Name</label>
+    <input id="custName">
 
-    <div>
-      <label>Delivery Address</label>
-      <textarea id="custAddress" placeholder="Enter full delivery address"></textarea>
-    </div>
+    <label>Address</label>
+    <textarea id="custAddress"></textarea>
 
     <button class="primary" onclick="confirmOrder()">Confirm Order</button>
   </div>
 </div>
-
 
 <div id="adminLogin" class="side hidden">
   <button class="back-btn" onclick="goBack()">← Back</button>
   <h3>Admin Login</h3>
 
   <div class="form-box">
-    <div>
-      <label>Username</label>
-      <input id="adminUser" type="text" placeholder="admin">
-    </div>
-
-    <div>
-      <label>Password</label>
-      <input id="adminPass" type="password" placeholder="Enter password">
-    </div>
-
+    <input id="adminUser" placeholder="admin">
+    <input id="adminPass" type="password" placeholder="admin123">
     <button class="primary" onclick="loginAdmin()">Login</button>
   </div>
 </div>
 
-
 <div id="toast" class="toast"></div>
 
 <script src="user.js"></script>
-
 </body>
 </html>

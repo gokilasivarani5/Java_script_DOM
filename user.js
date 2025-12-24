@@ -1,6 +1,6 @@
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
-let cartItemsData = [];
+let cart = [];
 
 function toast(msg) {
   const t = document.getElementById("toast");
@@ -18,6 +18,7 @@ function goBack() {
 }
 
 function renderStore() {
+  products = JSON.parse(localStorage.getItem("products")) || [];
   const store = document.getElementById("store");
   store.innerHTML = "";
 
@@ -25,41 +26,33 @@ function renderStore() {
     store.innerHTML += `
       <div class="card">
         <b>${p.name}</b>
-        <p>&#8377;${p.price}</p>
+        <p>₹${p.price}</p>
         ${p.stock === 0 ? `<span class="badge">Out of Stock</span>` : ""}
         <div class="qty">
-          <button onclick="changeQty(${p.id}, -1)">−</button>
+          <button onclick="changeQty(${p.id},-1)">−</button>
           <span id="qty-${p.id}">0</span>
-          <button onclick="changeQty(${p.id}, 1)" ${p.stock === 0 ? "disabled" : ""}>+</button>
+          <button onclick="changeQty(${p.id},1)" ${p.stock === 0 ? "disabled" : ""}>+</button>
         </div>
-        <button class="primary" onclick="addToCart(${p.id})" ${p.stock === 0 ? "disabled" : ""}>
-          Add to Cart
-        </button>
+        <button class="primary" onclick="addToCart(${p.id})">Add to Cart</button>
       </div>`;
   });
 }
 
-function changeQty(id, diff) {
-  const span = document.getElementById(`qty-${id}`);
-  const product = products.find(p => p.id === id);
-  let qty = +span.textContent + diff;
-
-  if (qty < 0) qty = 0;
-  if (qty > product.stock) return toast("Stock limit exceeded");
-
-  span.textContent = qty;
+function changeQty(id, d) {
+  const el = document.getElementById(`qty-${id}`);
+  const p = products.find(x => x.id === id);
+  let q = +el.textContent + d;
+  if (q < 0) q = 0;
+  if (q > p.stock) return toast("Stock limit");
+  el.textContent = q;
 }
 
 function addToCart(id) {
   const qty = +document.getElementById(`qty-${id}`).textContent;
   if (!qty) return toast("Select quantity");
 
-  const product = products.find(p => p.id === id);
-  const existing = cartItemsData.find(i => i.id === id);
-
-  if (existing) existing.qty += qty;
-  else cartItemsData.push({ id, name: product.name, price: product.price, qty });
-
+  const p = products.find(x => x.id === id);
+  cart.push({ id, name: p.name, price: p.price, qty });
   document.getElementById(`qty-${id}`).textContent = 0;
   toast("Added to cart");
 }
@@ -72,16 +65,13 @@ function openCart() {
 
 function renderCart() {
   const box = document.getElementById("cartItems");
-  const totalEl = document.getElementById("cartTotal");
-  box.innerHTML = "";
-
   let total = 0;
-  cartItemsData.forEach(i => {
+  box.innerHTML = "";
+  cart.forEach(i => {
     total += i.qty * i.price;
-    box.innerHTML += `<p>${i.name} → ${i.qty} × &#8377;${i.price}</p>`;
+    box.innerHTML += `<p>${i.name} → ${i.qty} × ₹${i.price}</p>`;
   });
-
-  totalEl.textContent = "Total: ₹" + total;
+  document.getElementById("cartTotal").textContent = "Total: ₹" + total;
 }
 
 function openAddress() {
@@ -90,10 +80,10 @@ function openAddress() {
 }
 
 function confirmOrder() {
-  if (!custName.value || !custAddress.value) return toast("Fill all details");
+  if (!custName.value || !custAddress.value) return toast("Fill details");
 
   let total = 0;
-  cartItemsData.forEach(c => {
+  cart.forEach(c => {
     total += c.qty * c.price;
     const p = products.find(p => p.id === c.id);
     p.stock -= c.qty;
@@ -102,7 +92,7 @@ function confirmOrder() {
   orders.push({
     customer: custName.value,
     address: custAddress.value,
-    items: cartItemsData,
+    items: cart,
     total,
     date: new Date().toLocaleString()
   });
@@ -110,11 +100,11 @@ function confirmOrder() {
   localStorage.setItem("products", JSON.stringify(products));
   localStorage.setItem("orders", JSON.stringify(orders));
 
-  cartItemsData = [];
+  cart = [];
   custName.value = custAddress.value = "";
   hideAllPanels();
   renderStore();
-  toast("Order placed successfully");
+  toast("Order placed");
 }
 
 function openAdmin() {
@@ -123,12 +113,9 @@ function openAdmin() {
 }
 
 function loginAdmin() {
-  if (adminUser.value === "admin" && adminPass.value === "admin123") {
+  if (adminUser.value === "admin" && adminPass.value === "admin123")
     location.href = "admin.html";
-  } else {
-    toast("Invalid admin login");
-  }
-  adminUser.value = adminPass.value = "";
+  else toast("Invalid login");
 }
 
 renderStore();
