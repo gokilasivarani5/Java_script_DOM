@@ -1,29 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Admin Dashboard | Inventory Management</title>
+  <meta charset="UTF-8">
+  <title>User Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <header>
-    Admin Dashboard – Inventory Management
-  </header>
+<header>
+  <h3>Online Store</h3>
+  <div>
+    <button class="primary" onclick="openCart()">Cart</button>
+    <button class="warn" onclick="openAdmin()">Admin</button>
+  </div>
+</header>
 
-  <div class="container">
-    <div class="form-card">
-      <input type="text" id="itemName" placeholder="Item Name">
-      <input type="number" id="itemPrice" placeholder="Price">
-      <input type="number" id="itemStock" placeholder="Initial Stock">
-      <button id="addItemBtn">Add Item</button>
+<div class="container">
+  <div id="store" class="grid"></div>
+</div>
+
+
+<div id="cartPanel" class="side hidden">
+  <button class="back-btn" onclick="goBack()">← Back</button>
+  <h3>Checkout</h3>
+
+  <div id="cartItems"></div>
+  <h4 id="cartTotal"></h4>
+
+  <button class="primary" onclick="openAddress()">Place Order</button>
+</div>
+
+
+<div id="addressPanel" class="side hidden">
+  <button class="back-btn" onclick="goBack()">← Back</button>
+  <h3>Customer Details</h3>
+
+  <div class="form-box">
+    <div>
+      <label>Full Name</label>
+      <input id="custName" type="text" placeholder="Enter your full name">
     </div>
 
-    <h2>Inventory Items</h2>
-    <div class="inventory" data-section="inventory"></div>
-  </div>
+    <div>
+      <label>Delivery Address</label>
+      <textarea id="custAddress" placeholder="Enter full delivery address"></textarea>
+    </div>
 
-  <script src="script.js"></script>
+    <button class="primary" onclick="confirmOrder()">Confirm Order</button>
+  </div>
+</div>
+
+
+<div id="adminLogin" class="side hidden">
+  <button class="back-btn" onclick="goBack()">← Back</button>
+  <h3>Admin Login</h3>
+
+  <div class="form-box">
+    <div>
+      <label>Username</label>
+      <input id="adminUser" type="text" placeholder="admin">
+    </div>
+
+    <div>
+      <label>Password</label>
+      <input id="adminPass" type="password" placeholder="Enter password">
+    </div>
+
+    <button class="primary" onclick="loginAdmin()">Login</button>
+  </div>
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+<script src="user.js"></script>
+
 </body>
 </html>

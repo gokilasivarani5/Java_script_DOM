@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h3>Admin Dashboard</h3>
+  <button class="primary" onclick="toggleOrders()">Customer Orders</button>
+</header>
+
+<div class="container">
+
+  <div class="card form-card">
+    <h3>Add Product</h3>
+    <div class="form-grid">
+      <input id="name" placeholder="Product Name">
+      <input id="price" type="number" placeholder="Price">
+      <input id="stock" type="number" placeholder="Stock">
+      <button class="primary" onclick="addProduct()">Add</button>
+    </div>
+  </div>
+
+  <h3>Inventory</h3>
+  <div id="products" class="grid"></div>
+
+  <h3>Customer Orders</h3>
+  <div id="orders" class="grid hidden"></div>
+
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
