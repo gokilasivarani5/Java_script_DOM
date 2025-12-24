@@ -6,6 +6,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let itemId = 0;
 
+  inputs.forEach(input => {
+    input.addEventListener("focus", () => {
+      input.style.backgroundColor = "#eaf4ff";
+    });
+    input.addEventListener("blur", () => {
+      input.style.backgroundColor = "";
+    });
+  });
+
+  inputs[1].addEventListener("input", () => {
+    inputs[1].style.border = inputs[1].value < 0 ? "2px solid red" : "";
+  });
+
+  inputs[2].addEventListener("input", () => {
+    inputs[2].style.border = inputs[2].value < 0 ? "2px solid red" : "";
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      addBtn.click();
+    }
+  });
+
   addBtn.addEventListener("click", () => {
 
     const name = inputs[0].value.trim();
@@ -41,6 +64,16 @@ document.addEventListener("DOMContentLoaded", () => {
     updateUI(card, price, stock);
   });
 
+  inventory.addEventListener("mouseover", (e) => {
+    const card = e.target.closest(".item-card");
+    if (card) card.style.transform = "scale(1.02)";
+  });
+
+  inventory.addEventListener("mouseout", (e) => {
+    const card = e.target.closest(".item-card");
+    if (card) card.style.transform = "scale(1)";
+  });
+
   inventory.addEventListener("click", (event) => {
 
     const btn = event.target;
@@ -53,10 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn.classList.contains("update")) {
       const newPrice = prompt("Enter new price:", price);
       const newStock = prompt("Enter new stock:", stock);
-
       const p = parseFloat(newPrice);
       const s = parseInt(newStock);
-
       if (!isNaN(p) && !isNaN(s)) {
         updateUI(card, p, s);
       }
@@ -65,9 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn.classList.contains("highlight")) {
       card.classList.toggle("highlighted");
       btn.textContent =
-        card.classList.contains("highlighted")
-          ? "Unhighlight"
-          : "Highlight";
+        card.classList.contains("highlighted") ? "Unhighlight" : "Highlight";
     }
 
     if (btn.classList.contains("delete")) {
@@ -78,15 +107,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function updateUI(card, price, stock) {
-
     card.setAttribute("data-price", price);
     card.setAttribute("data-stock", stock);
-
     card.querySelector(".item-price").textContent = "Price: ₹" + price;
     card.querySelector(".item-stock").textContent = "Stock: " + stock;
     card.querySelector(".item-total").textContent =
       "Total: ₹" + (price * stock);
-
     if (stock <= 5) {
       card.classList.add("low-stock");
     } else {

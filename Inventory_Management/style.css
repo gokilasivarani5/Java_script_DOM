@@ -62,6 +62,7 @@ h2 {
   padding: 16px;
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.15s ease;
 }
 
 .item-card.low-stock {
