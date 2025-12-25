@@ -44,16 +44,19 @@
   </div>
 </div>
 
-<div id="adminLogin" class="side hidden">
-  <button class="back-btn" onclick="goBack()">← Back</button>
-  <h3>Admin Login</h3>
+<div id="adminOverlay" class="modal-overlay hidden">
+  <div class="modal-box">
+    <button class="close-btn" onclick="goBack()">✖</button>
+    <h3>Admin Login</h3>
 
-  <div class="form-box">
-    <input id="adminUser" placeholder="admin">
-    <input id="adminPass" type="password" placeholder="admin123">
-    <button class="primary" onclick="loginAdmin()">Login</button>
+    <div class="form-box">
+      <input id="adminUser" placeholder="admin">
+      <input id="adminPass" type="password" placeholder="admin123">
+      <button class="primary" onclick="loginAdmin()">Login</button>
+    </div>
   </div>
 </div>
+
 
 <div id="toast" class="toast"></div>
 

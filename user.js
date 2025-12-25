@@ -15,6 +15,7 @@ function hideAllPanels() {
 
 function goBack() {
   hideAllPanels();
+  document.getElementById("adminOverlay").classList.add("hidden");
 }
 
 function renderStore() {
@@ -52,9 +53,28 @@ function addToCart(id) {
   if (!qty) return toast("Select quantity");
 
   const p = products.find(x => x.id === id);
-  cart.push({ id, name: p.name, price: p.price, qty });
+
+  // Check if item already exists in cart
+  const existing = cart.find(x => x.id === id);
+
+  if (existing) {
+    // Prevent exceeding stock
+    if (existing.qty + qty > p.stock)
+      return toast("Stock limit reached");
+
+    existing.qty += qty;
+  } else {
+    cart.push({
+      id,
+      name: p.name,
+      price: p.price,
+      qty
+    });
+  }
+
   document.getElementById(`qty-${id}`).textContent = 0;
   toast("Added to cart");
+  renderCart();
 }
 
 function openCart() {
@@ -67,10 +87,12 @@ function renderCart() {
   const box = document.getElementById("cartItems");
   let total = 0;
   box.innerHTML = "";
+
   cart.forEach(i => {
     total += i.qty * i.price;
     box.innerHTML += `<p>${i.name} → ${i.qty} × ₹${i.price}</p>`;
   });
+
   document.getElementById("cartTotal").textContent = "Total: ₹" + total;
 }
 
@@ -109,7 +131,7 @@ function confirmOrder() {
 
 function openAdmin() {
   hideAllPanels();
-  document.getElementById("adminLogin").classList.remove("hidden");
+  document.getElementById("adminOverlay").classList.remove("hidden");
 }
 
 function loginAdmin() {
@@ -117,5 +139,18 @@ function loginAdmin() {
     location.href = "admin.html";
   else toast("Invalid login");
 }
+const overlay = document.getElementById("adminOverlay");
+
+overlay.addEventListener("click", function(e) {
+  if (e.target === overlay) {
+    overlay.classList.add("hidden");
+  }
+});
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    document.getElementById("adminOverlay").classList.add("hidden");
+  }
+});
+
 
 renderStore();
